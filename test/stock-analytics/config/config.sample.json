@@ -1,0 +1,8 @@
+{
+    "url": "https://www.alphavantage.co/query",
+    "grpc": {
+        "hostname": "localhost",
+        "port": 8080
+    },
+    "apikey": "https://www.alphavantage.co/support/#api-key"
+}

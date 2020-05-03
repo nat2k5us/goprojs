@@ -1,0 +1,3 @@
+[submodule "protobuf/proto-schema"]
+	path = protobuf/proto-schema
+	url = git@github.com:stocks-playground/proto-schema.git

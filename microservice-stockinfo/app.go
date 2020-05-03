@@ -1,0 +1,82 @@
+package main
+
+import (
+	"context"
+	"log"
+	"math/rand"
+	"net"
+	"strconv"
+	"time"
+	"os"
+	 "os/signal"
+	 "syscall"
+
+	"./stockinfo"	
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+)
+
+type server struct{}
+
+func main() {
+	addr := os.Getenv("STOCKINFO_LISTEN_ADDR")
+	lis, err := net.Listen("tcp", addr)
+	if err != nil {
+		log.Fatalf("Failed to listen: %v", err)
+	}
+	s := grpc.NewServer()
+	stockinfo.RegisterStockInfoServiceServer(s, &server{})
+	//this is used to allow API inspection via grpc_cli tool
+	reflection.Register(s)
+	stop := ossignal()
+	go func() {
+		<-stop
+		s.Stop()
+	}()
+	log.Printf("StockInfo node started listening at %v", addr)
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("Failed to serve: %v", err)
+	}
+	log.Println("\nThe server has stopped")
+}
+
+func (s *server) StockInfo(context.Context, *stockinfo.StockInfoRequest) (*stockinfo.StockInfoResponse, error) {
+	rand.Seed(time.Now().UTC().UnixNano())
+
+	rsp := stockinfo.StockInfoResponse{
+		Stockname:  "NVDA",
+		CciData:    randInt(5, -100, 100),
+		RsiData:    randInt(5, 0, 100),
+		MacdData:   randInt(5, -30, 30),
+		VolumeData: randInt(5, 5000, 50000)}
+
+	return &rsp, nil
+}
+
+func randInt(size int, min int, max int) []*stockinfo.Indicator {
+	result := make([]*stockinfo.Indicator, size)
+	timeRef, _ := time.Parse(time.RFC3339, "2018-11-11 09:30Z")
+	for i := range result {
+		res := new(stockinfo.Indicator)
+		res.Value = float32(min + rand.Intn(max-min))
+		d, _ := time.ParseDuration(strconv.Itoa(i+1) + "m")
+		res.Timestamp = timeRef.Add(d).Unix()
+		result[i] = res
+	}
+	return result
+}
+
+func ossignal() chan int {
+	ossignal := make(chan os.Signal, 1)
+	pulse := make(chan int)
+	signal.Notify(ossignal,
+		syscall.SIGHUP,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+		syscall.SIGQUIT)
+	go func() {
+		<-ossignal
+		pulse <- 1
+	}()
+	return pulse
+}

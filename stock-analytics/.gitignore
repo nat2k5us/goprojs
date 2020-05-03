@@ -1,0 +1,4 @@
+*.pdf
+stock-analytics
+config/config.json
+*.out

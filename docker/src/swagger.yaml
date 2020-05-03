@@ -1,0 +1,1891 @@
+basePath: /v3
+consumes:
+- application/json
+definitions:
+  Account:
+    description: Account contains brokerage account information for individual brokerage
+      accounts
+    properties:
+      AccountDetail:
+        $ref: '#/definitions/AccountDetail'
+      AccountID:
+        description: TradeStation account ID.
+        type: string
+      AccountType:
+        description: |-
+          Type of the account
+          C : Cash
+          M : Margin
+          F : Futures
+          D : DVP
+        type: string
+      Alias:
+        description: A user specified name that identifies a TradeStation account
+        type: string
+      AltID:
+        description: TradeStation Alternate ID.
+        type: string
+      Currency:
+        description: The currency
+        type: string
+      Status:
+        description: |-
+          Status of a specific account.
+          Active
+          Closed
+          Closing Transaction Only
+          Margin Call - Closing Transactions Only
+          Inactive
+          Liquidating Transactions Only
+          Restricted
+          90 Day Restriction-Closing Transaction Only
+        type: string
+    type: object
+  AccountDetail:
+    description: accountDetail contains detailed information about specific accounts
+      depending on account type
+    properties:
+      CryptoEnabled:
+        description: Is Crypto Trading Enabled
+        type: boolean
+      DayTradingQualified:
+        description: Is Day Trading Qualified
+        type: boolean
+      EnrolledInRegTProgram:
+        description: Enrolled In Reg T Program
+        type: boolean
+      IsStockLocateEligible:
+        description: Is Stock Locate Eligible
+        type: boolean
+      OptionApprovalLevel:
+        description: |-
+          Valid values: 0 1 2 3 4 5
+          (Equities) The option approval level will determine what options strategies you will be able to employ in the account. In general terms, the levels are defined as follows
+          Level 0 - No options trading allowed.
+          Level 1 - Writing of Covered Calls, Buying Protective Puts.
+          Level 2 - Level 1 + Buying Calls, Buying Puts, Writing Covered Puts.
+          Level 3 - level 2+ Stock Option Spreads, Index Option Spreads, Butterfly Spreads, Condor Spreads, Iron Butterfly Spreads, Iron Condor Spreads.
+          Level 4 - Level 3 + Writing of Naked Puts (Stock Options).
+          Level 5 - Level 4 + Writing of Naked Puts (Index Options), Writing of Naked Calls (Stock Options), Writing of Naked Calls (Index Options).
+        format: int64
+        type: integer
+      PatternDayTrader:
+        description: (Equities) Indicates whether you are considered a pattern day
+          trader. As per FINRA rules, you will be considered a pattern day trader
+          if you trade 4 or more times in 5 business days and your day-trading activities
+          are greater than 6 percent of your total trading activity for that same
+          five-day period. A pattern day trader must maintain a minimum equity of
+          $25,000 on any day that the customer day trades. If the account falls below
+          the $25,000 requirement, the pattern day trader will not be permitted to
+          day trade until the account is restored to the $25,000 minimum equity level.
+        type: boolean
+      RequiresBuyingPowerWarning:
+        description: Requires Buying Power Warning
+        type: boolean
+    type: object
+  Accounts:
+    description: Accounts contains brokerage account information for the identified
+      user
+    properties:
+      Accounts:
+        items:
+          $ref: '#/definitions/Account'
+        type: array
+    type: object
+  AdvancedOption:
+    description: AdvancedOption for an order
+    properties:
+      MarketActivationRules:
+        description: Market activation rules with this order
+        items:
+          $ref: '#/definitions/MarketActivationRule'
+        type: array
+      ShowOnlyQuantity:
+        description: Show only quantity
+        type: string
+      TimeActivationRules:
+        description: Time activation rules with this order
+        items:
+          $ref: '#/definitions/TimeActivationRule'
+        type: array
+      TrailingStop:
+        $ref: '#/definitions/TrailingStop'
+    type: object
+  AdvancedOrderType:
+    description: AdvancedOrderType is the type of the advanced order
+    type: string
+    enum:
+    - NORMAL
+    - BRK
+    - OCO
+  AssetType:
+    title: 'AssetType is an enum type to classify symbols based on their basic type:
+      Equity, Future, Option, or Forex.'
+    type: string
+    enum:
+    - UNKNOWN
+    - STOCK
+    - STOCKOPTION
+    - FUTURE
+    - FUTUREOPTION
+    - FOREX
+    - CURRENCYOPTION
+    - INDEX
+    - INDEXOPTION
+    - MUTUALFUND
+    - MONEYMARKETFUND
+    - BOND
+    - CRYPTO
+  BODBalance:
+    description: bodBalance contains beginning of day balance information for a single
+      account
+    properties:
+      AccountID:
+        description: The account ID of this account
+        type: string
+      AccountType:
+        description: The account type of this account
+        type: string
+      BalanceDetail:
+        $ref: '#/definitions/BODBalanceDetail'
+      CurrencyDetails:
+        items:
+          $ref: '#/definitions/BODCurrencyDetail'
+        type: array
+    type: object
+  BODBalanceDetail:
+    description: bodBalanceDetail contains detailed beginning of day balance information
+      which varies according to account type
+    properties:
+      AccountBalance:
+        type: string
+        description: Unrealized Profit and Loss
+      DayTradingMarginableBuyingPower:
+        type: string
+        description: Day Trading Marginable Buying Power
+      MarginRequirement:
+        type: string
+        description: Margin Requirement of the account
+      OpenTradeEquity:
+        type: string
+        description: Open Trade Equity in the account
+      OptionBuyingPower:
+        type: string
+        description: Option Buying Power
+      OptionValue:
+        type: string
+        description: Option value
+      OvernightBuyingPower:
+        type: string
+        description: Overnight Buying power
+    type: object
+  BODCurrencyDetail:
+    description: bodCurrencyDetail contains beginning of day currency detail information
+      which varies according to account type
+    properties:
+      AccountMarginRequirement:
+        type: string
+        description: Account Margin Requirement
+      AccountOpenTradeEquity:
+        type: string
+        description: Account Open Trade Equity
+      AccountSecurities:
+        type: string
+        description: Account Securities
+      CashBalance:
+        type: string
+        description: Cash Balance in the account
+      Currency:
+        description: The currency of the entity
+        type: string
+      MarginRequirement:
+        type: string
+        description: Account Margin Requirement
+      OpenTradeEquity:
+        type: string
+        description: Open Trade Equity in the account
+      Securities:
+        type: string
+        description: Securities on Deposit
+    type: object
+  Balance:
+    description: balance contains realtime balance information for a single account
+    properties:
+      AccountID:
+        description: Name of the account
+        type: string
+      AccountType:
+        description: The account type of this account
+        type: string
+      BalanceDetail:
+        $ref: '#/definitions/BalanceDetail'
+      BuyingPower:
+        type: string
+        description: Buying Power available in the account
+      CashBalance:
+        type: string
+        description: Indicates the value of real-time cash balance.
+      CurrencyDetails:
+        items:
+          $ref: '#/definitions/CurrencyDetail'
+        type: array
+      Equity:
+        type: string
+        description: Equity in account
+      MarketValue:
+        type: string
+        description: Market Value
+      TodaysProfitLoss:
+        type: string
+        description: Todays Profit Loss
+      UnclearedDeposit:
+        type: string
+        description: Uncleared Deposit
+    type: object
+  BalanceDetail:
+    description: balanceDetail contains realtime balance information that varies according
+      to account type
+    properties:
+      CostOfPositions:
+        type: string
+        description: (Equities) Total real-time cost of all open positions. Positions
+          are based on the actual entry price.
+      DayTradeExcess:
+        type: string
+        description: (Equities) (Buying Power Available - Buying Power Used) / Buying
+          Power Multiplier, (Futures) (Cash + UnrealizedGains) - Buying Power Used
+      DayTradeMargin:
+        type: string
+        description: (Futures) Money field representing the current total amount of
+          futures day trade margin.
+      DayTradeOpenOrderMargin:
+        type: string
+        description: (Futures) Money field representing the current amount of money
+          reserved for open orders.
+      InitialMargin:
+        type: string
+        description: (Futures) Sum (Initial Margins of all positions in the given
+          account)
+      MaintenanceMargin:
+        type: string
+        description: Indicates the value of real-time maintance margin.
+      MaintenanceRate:
+        type: string
+        description: Maintenance Margin Rate
+      MarginRequirement:
+        type: string
+        description: Indicates the value of real-time account margin requirement.
+      OpenOrderMargin:
+        type: string
+        description: (Futures) The dollar amount of Open Order Margin for the given
+          futures account.
+      OptionBuyingPower:
+        type: string
+        description: (Equities) The intraday buying power for options.
+      OptionsMarketValue:
+        type: string
+        description: Options Market Value
+      OvernightBuyingPower:
+        type: string
+        description: (Equities) Overnight Buying Power (Regulation T) at the start
+          of the trading day.
+      RealizedProfitLoss:
+        type: string
+        description: Indicates the value of real-time account realized profit or loss.
+      RequiredMargin:
+        type: string
+        description: (Equities) Total required margin for all held positions
+      SecurityOnDeposit:
+        type: string
+        description: (Futures) The value of special securities that are deposited
+          by the customer with the clearing firm for the sole purpose of increasing
+          purchasing power in their trading account. This number will be reset daily
+          by the account balances clearing file. The entire value of this field will
+          increase purchasing power.
+      TodayRealTimeTradeEquity:
+        type: string
+        description: (Futures) The unrealized P/L for today. Unrealized P/L - BODOpenTradeEquity
+      TradeEquity:
+        type: string
+        description: (Futures) The dollar amount of unrealized profit and loss for
+          the given futures account. Same value as RealTimeUnrealizedGains.
+      UnrealizedProfitLoss:
+        type: string
+        description: Indicates the value of real-time account unrealized profit or
+          loss.
+      UnsettledFunds:
+        type: string
+        description: Unsettled Funds are funds that have been closed but not settled.
+    type: object
+  Balances:
+    description: Balances contains a collection of realtime balance information
+    properties:
+      Balances:
+        items:
+          $ref: '#/definitions/Balance'
+        type: array
+    type: object
+  BalancesBOD:
+    description: BalancesBOD is colleciton of beginning of day balance information
+    properties:
+      BODBalances:
+        items:
+          $ref: '#/definitions/BODBalance'
+        type: array
+    type: object
+  Bar:
+    description: Bar is contract for Barcharts
+    properties:
+      Close:
+        type: string
+        description: The close price of the bar
+      DownTicks:
+        description: The downticks in the bar
+        format: uint64
+        type: integer
+      DownVolume:
+        description: The down volume in the bar
+        format: uint64
+        type: integer
+      Epoch:
+        description: The Epoch time
+        format: int64
+        type: integer
+      High:
+        type: string
+        description: The high of the bar
+      IsEndOfHistory:
+        description: Is this the end of history bar
+        type: boolean
+      IsRealtime:
+        description: Is real time
+        type: boolean
+      Low:
+        type: string
+        description: The low of the bar
+      Open:
+        type: string
+        description: The open of the bar
+      OpenInterest:
+        type: string
+        description: Open Interest
+      Symbol:
+        description: The symbol of the bar
+        type: string
+      TimeStamp:
+        $ref: '#/definitions/Date'
+      TotalTicks:
+        description: Total ticks in the bar
+        format: uint64
+        type: integer
+      TotalVolume:
+        type: string
+        description: Total Volume
+      UnchangedTicks:
+        description: Any unchanged ticks in the bar
+        format: uint64
+        type: integer
+      UnchangedVolume:
+        description: Any unchanged volume in the bar
+        format: uint64
+        type: integer
+      UpTicks:
+        description: Upticks in the bar
+        format: uint64
+        type: integer
+      UpVolume:
+        description: Up volume in the bar
+        format: uint64
+        type: integer
+      heartbeat:
+        description: The heart beat
+        format: uint64
+        type: integer
+    type: object
+  Bars:
+    description: Bars is container for historical bars
+    properties:
+      Bars:
+        items:
+          $ref: '#/definitions/Bar'
+        type: array
+    type: object
+  CallPut:
+    description: CallPut defines whether an option is a call or a put
+    type: string
+    enum:
+    - CALL
+    - PUT
+    - NA
+  CurrencyDetail:
+    description: currencyDetail contains currency detail information which varies
+      according to account type
+    properties:
+      AccountConversionRate:
+        type: string
+        description: Indicates the rate used to convert from the currency of the symbol
+          to the currency of the account.
+      AccountMarginRequirement:
+        type: string
+        description: Indicates the value of real-time account margin requirement.
+      CashBalance:
+        type: string
+        description: Indicates the value of real-time cash balance.
+      Commission:
+        type: string
+        description: (Futures) The brokerage commission cost and routing fees (if
+          applicable) for a trade based on the number of shares or contracts.
+      Currency:
+        description: Currency is the currency this account is traded in
+        type: string
+      InitialMargin:
+        type: string
+        description: Initial Margin
+      MaintenanceMargin:
+        type: string
+        description: Maintainance Margin
+      RealizedProfitLoss:
+        type: string
+        description: Realised Profit and Loss
+      UnrealizedProfitLoss:
+        type: string
+        description: Unrealized Profit and Loss
+    type: object
+  Date:
+    description: |-
+      This type does not include location information, and therefore does not
+      describe a unique 24-hour timespan.
+    properties:
+      Day:
+        format: int64
+        type: integer
+      Month:
+        $ref: '#/definitions/Month'
+      Year:
+        format: int64
+        type: integer
+    title: A Date represents a date (year, month, day).
+    type: object
+  Decimal:
+    title: Decimal represents a decimal number, which is a precise decimal representation
+      not subject to floating point issues.
+    type: string
+  Duration:
+    description: Duration defines the duration that can be sent to or received
+    type: string
+    enum:
+    - DAY
+    - DYP
+    - GTC
+    - GCP
+    - GTD
+    - GDP
+    - OPG
+    - CLO
+    - IOC
+    - FOK
+    - 1
+    - 3
+    - 5
+  ErrorResponse:
+    description: ErrorResponse contains error details for sending response objects
+    properties:
+      Error:
+        description: Error Title "BadRequest", "Unauthorized", "Forbidden", "TooManyRequests","InternalServerError",
+          "NotImplemented","ServiceUnavailable","GatewayTimeout"
+        type: string
+      Message:
+        description: The description of the error
+        type: string
+      TraceId:
+        description: TraceID is a GUID string used for tracing the error
+        type: string
+    type: object
+  GroupOrderRequest:
+    description: GroupOrderRequest defines the request for placing a group trade through
+      WebAPI
+    properties:
+      Orders:
+        items:
+          $ref: '#/definitions/OrderRequest'
+        type: array
+      Type:
+        description: The group order type
+        type: string
+    type: object
+  IncrementScheduleRow:
+    description: |-
+      IncrementScheduleRow describes a threshold where prices above or equal to the StartsAt threshold will increment at the
+      Increment value defined. A series of rows are provided to build a table to the IncrementSchedule() scheme option.
+    properties:
+      Increment:
+        type: string
+        description: The incremental value
+      StartsAt:
+        type: string
+        description: The initial value to start incrementing from
+    type: object
+  MarketActivationRule:
+    properties:
+      LogicOperator:
+        description: |-
+          Valid values: "And" "Or"
+          Relation with the previous activation rule when given a list of MarketActivationRules. Ignored for the first MarketActivationRule
+        type: string
+      Predicate:
+        description: |-
+          Valid Values: "Lt""Lte""Gt""Gte"
+          The predicate comparison for the market rule type. E.g. Lt (less than).
+        type: string
+      Price:
+        description: Valid only for Type="Price", the price at which the rule will
+          trigger when the price hits ticks as specified by TriggerType
+        type: string
+      RuleType:
+        description: Type of the activation rule. Currently only support "Price"
+        type: string
+      Symbol:
+        description: The symbol that is associated with this rule
+        type: string
+      TriggerKey:
+        description: |-
+          Valid values: "STT""STTN""SBA""SAB""DTT""DTTN""DBA""DAB""TTT""TTTN""TBA""TAB"
+          The ticks behavior for the activation rule.
+        type: string
+    title: MarketActivationRule that must be met before the order is sent to the exchange.
+    type: object
+  MarketFlags:
+    description: MarketFlags represents market specific info for a symbol
+    properties:
+      IsBats:
+        description: Is Bats
+        type: boolean
+      IsDelayed:
+        description: Is delayed
+        type: boolean
+      IsHalted:
+        description: Is halted
+        type: boolean
+      IsHardToBorrow:
+        description: Is Hard to borrow
+        type: boolean
+    type: object
+  Month:
+    format: int64
+    title: A Month specifies a month of the year (January = 1, ...).
+    type: integer
+  Order:
+    properties:
+      AccountID:
+        description: ID that identifies a specific TradeStation account that is being
+          used for a particular order.
+        type: string
+      AdvancedOptions:
+        description: |-
+          Valid Values : "Activation Rule" "All or None""Trailing Stop""If Touched""Show Only""Discretionary""Non-Display""Peg""Book Only""Add Liquidity"
+          Will display a value when the order has advanced order rules associated with it or is part of a bracket order.
+        type: string
+      ClosedDateTime:
+        description: The Closed Date Time of this order
+        format: date-time
+        type: string
+      CommissionFee:
+        type: string
+        description: The commision charged for this transaction
+      ConversionRate:
+        type: string
+        description: Conversion rate used to translate the position’s market value
+          and PNL from symbol currency to account currency.
+      Duration:
+        description: The duration for this order
+        type: string
+      FilledPrice:
+        type: string
+        description: At the top level, this is the average fill price. For expanded
+          levels, this is the actual execution price.
+      GoodTillDate:
+        description: The order is good until
+        format: date-time
+        type: string
+      GroupName:
+        description: It can be used to identify orders that are part of the same bracket.
+        type: string
+      Legs:
+        description: An array of legs associated with this order
+        items:
+          $ref: '#/definitions/OrderLeg'
+        type: array
+      LimitPrice:
+        type: string
+        description: The limit price for Limit and Stop Limit orders.
+      MarketActivationRules:
+        description: Market activation rules associated with this order
+        items:
+          $ref: '#/definitions/MarketActivationRule'
+        type: array
+      OpenedDateTime:
+        description: The opened date time
+        format: date-time
+        type: string
+      OrderID:
+        description: The order ID of this order
+        type: string
+      OrderType:
+        $ref: '#/definitions/OrderType'
+      PriceUsedForBuyingPower:
+        type: string
+        description: Price used for the buying power calculation of the order.
+      RejectReason:
+        description: Rejection Reason
+        type: string
+      Routing:
+        description: Identifies the routing selection made by the customer when placing
+          the order.
+        type: string
+      ShowOnlyQuantity:
+        description: This option allows you to hide the true number of shares that
+          you wish to buy or sell.
+        type: string
+      Spread:
+        description: The spread type for an option order.
+        type: string
+      Status:
+        $ref: '#/definitions/Status'
+      StatusDescription:
+        description: Description of the status
+        type: string
+      StopPrice:
+        type: string
+        description: The stop price for stop orders.
+      TimeActivationRules:
+        description: The time activation rules of this order
+        items:
+          $ref: '#/definitions/TimeActivationRule'
+        type: array
+      TrailingStop:
+        $ref: '#/definitions/TrailingStop'
+      TriggeredBy:
+        description: This order is trigged by
+        type: string
+      UnbundledRouteFee:
+        type: string
+        description: Will contain a value if the order has received a routing fee.
+    title: Order object represents a Brokerage order.
+    type: object
+  OrderConfirmLeg:
+    description: OrderConfirmLeg is a leg in order confirm requests
+    properties:
+      Quantity:
+        type: string
+        description: Quantity
+      Symbol:
+        type: string
+      TradeAction:
+        $ref: '#/definitions/TradeAction'
+    type: object
+  OrderConfirmOSO:
+    description: OrderConfirmOSO is an OSO used in order confirm requests
+    properties:
+      Orders:
+        items:
+          $ref: '#/definitions/OrderConfirmRequest'
+        type: array
+      Type:
+        $ref: '#/definitions/AdvancedOrderType'
+    type: object
+  OrderConfirmRequest:
+    properties:
+      AccountKey:
+        description: The account key
+        type: string
+      AdvancedOptions:
+        $ref: '#/definitions/AdvancedOption'
+      AssetType:
+        $ref: '#/definitions/AssetType'
+      Legs:
+        items:
+          $ref: '#/definitions/OrderConfirmLeg'
+        type: array
+      LimitPrice:
+        description: The limit price for this order
+        type: string
+      OSOs:
+        items:
+          $ref: '#/definitions/OrderConfirmOSO'
+        type: array
+      OrderType:
+        $ref: '#/definitions/OrderType'
+      Quantity:
+        description: The quantity of the order
+        type: string
+      Route:
+        description: The route of the order
+        type: string
+      Spread:
+        description: The option spread of this order
+        type: string
+      StopPrice:
+        description: The stop price for this order
+        type: string
+      Symbol:
+        description: The symbol for the order
+        type: string
+      TimeInForce:
+        $ref: '#/definitions/TimeInForce'
+      TradeAction:
+        $ref: '#/definitions/TradeAction'
+    title: OrderConfirmRequest defines the request used to WebAPI for confirming an
+      order.
+    type: object
+  OrderConfirmResponse:
+    description: OrderConfirmResponse definition. The response will also contain asset-specific
+      fields
+    properties:
+      Account:
+        description: The account information
+        type: string
+      AccountCurrency:
+        description: The curreny the account is traded in
+        type: string
+      AssetType:
+        $ref: '#/definitions/AssetType'
+      BaseCurrency:
+        description: The base currency
+        type: string
+      BaseSymbolName:
+        description: Name of the base symbol
+        type: string
+      CounterCurrency:
+        description: The counter currency
+        type: string
+      Currency:
+        description: The currency used in this transaction
+        type: string
+      DebitCreditEstimatedCost:
+        type: string
+        description: Debit Credit Estimated Cost
+      DisplayName:
+        description: The display name
+        type: string
+      EstimatedCommission:
+        type: string
+        description: Estimated Commission
+      EstimatedCost:
+        type: string
+        description: Estimated Cost
+      EstimatedPrice:
+        type: string
+        description: Estimated Price
+      InitialMarginDisplay:
+        description: Initial margin displayed for this transaction
+        type: string
+      Legs:
+        items:
+          $ref: '#/definitions/OrderConfirmResponseLeg'
+        type: array
+      LimitPrice:
+        type: string
+        description: Limit Price
+      MarketActivationRules:
+        description: Any market activation rules associated with this order
+        items:
+          $ref: '#/definitions/MarketActivationRule'
+        type: array
+      OrderConfirmId:
+        description: The corformation ID of this order
+        type: string
+      ProductCurrency:
+        description: The currency of the product
+        type: string
+      Route:
+        description: The route of this transaction
+        type: string
+      ShowOnlyQuantity:
+        description: Show only quantity
+        format: int64
+        type: integer
+      Spread:
+        description: The option spread
+        type: string
+      StopPrice:
+        type: string
+        description: Stop Price
+      SummaryMessage:
+        description: Summary message
+        type: string
+      TimeActivationRules:
+        description: Any time activation rules associated with this order
+        items:
+          $ref: '#/definitions/TimeActivationRule'
+        type: array
+      TimeInForce:
+        $ref: '#/definitions/TimeInForce'
+      TrailingStop:
+        $ref: '#/definitions/TrailingStop'
+      UnderlyingSymbolName:
+        description: Underlying symbol name
+        type: string
+    type: object
+  OrderConfirmResponseLeg:
+    description: OrderConfirmResponseLeg defines an object that is returned from order
+      confirm in WebAPI
+    properties:
+      ExpirationDate:
+        description: The expiration time for this order
+        format: date-time
+        type: string
+      OptionType:
+        $ref: '#/definitions/CallPut'
+      Quantity:
+        description: The quantity
+        type: string
+      StrikePrice:
+        description: The strike price for this option
+        type: string
+      Symbol:
+        description: The symbol name associated with this option
+        type: string
+      TradeAction:
+        $ref: '#/definitions/TradeAction'
+    type: object
+  OrderConfirmResponses:
+    description: OrderConfirmResponses is collection of OrderConfirmResponse objects
+    properties:
+      OrderConfirms:
+        items:
+          $ref: '#/definitions/OrderConfirmResponse'
+        type: array
+    type: object
+  OrderLeg:
+    description: OrderLeg is an object returned from WebAPI
+    properties:
+      BuyOrSell:
+        description: Is this a buy or sell leg
+        type: string
+      ExecQuantity:
+        type: string
+        description: Exec Quantity
+      OpenOrClose:
+        description: What kind of order leg - Opening or Closing
+        type: string
+      QuantityOrdered:
+        type: string
+        description: Quantity Ordered
+      QuantityRemaining:
+        type: string
+        description: Quantity Remaining
+      Symbol:
+        description: Option associated with this leg
+        type: string
+      Underlying:
+        description: Underlying Symbol associated with this option leg
+        type: string
+    type: object
+  OrderReplaceRequest:
+    description: OrderReplaceRequest defines the request for replacing a trade through
+      WebAPI
+    properties:
+      AccountKey:
+        description: The account key for this order
+        type: string
+      AdvancedOptions:
+        $ref: '#/definitions/AdvancedOption'
+      AssetType:
+        $ref: '#/definitions/AssetType'
+      Legs:
+        items:
+          $ref: '#/definitions/OrderRequestLegs'
+        type: array
+      LimitPrice:
+        description: The limit price for this order
+        type: string
+      OSOs:
+        items:
+          $ref: '#/definitions/OrderRequestOSO'
+        type: array
+      OrderConfirmId:
+        description: The order confirmation ID for this order
+        type: string
+      OrderId:
+        description: The order ID for this order
+        type: string
+      OrderType:
+        $ref: '#/definitions/OrderType'
+      Quantity:
+        description: The quantity of the order
+        type: string
+      Route:
+        description: The route of the order
+        type: string
+      StopPrice:
+        description: The stop price for this order
+        type: string
+      Symbol:
+        description: The symbol of the order
+        type: string
+      TimeInForce:
+        $ref: '#/definitions/TimeInForce'
+      TradeAction:
+        $ref: '#/definitions/TradeAction'
+    type: object
+  OrderRequest:
+    description: OrderRequest defines the request for placing a trade through WebAPI
+    properties:
+      AccountKey:
+        description: The account key
+        type: string
+      AdvancedOptions:
+        $ref: '#/definitions/AdvancedOption'
+      AssetType:
+        $ref: '#/definitions/AssetType'
+      BuyingPowerWarning:
+        description: The buying power warning for this order
+        type: string
+      Legs:
+        items:
+          $ref: '#/definitions/OrderRequestLegs'
+        type: array
+      LimitPrice:
+        description: The limit price for this order
+        type: string
+      MarketActivationRules:
+        items:
+          $ref: '#/definitions/MarketActivationRule'
+        type: array
+      OSOs:
+        items:
+          $ref: '#/definitions/OrderRequestOSO'
+        type: array
+      OrderConfirmId:
+        description: The corfirmation ID for this order
+        type: string
+      OrderType:
+        $ref: '#/definitions/OrderType'
+      Quantity:
+        description: The quantity of the order
+        type: string
+      Route:
+        description: The route of the order
+        type: string
+      StopPrice:
+        description: The stop price for this order
+        type: string
+      Symbol:
+        description: The symbol used for this order
+        type: string
+      TimeActivationRules:
+        items:
+          $ref: '#/definitions/TimeActivationRule'
+        type: array
+      TimeInForce:
+        $ref: '#/definitions/TimeInForce'
+      TradeAction:
+        $ref: '#/definitions/TradeAction'
+    type: object
+  OrderRequestLegs:
+    description: OrderRequestLegs defines the legs for placing a trade on WebAPI
+    properties:
+      Quantity:
+        type: string
+        description: Quantity of the order.
+      Symbol:
+        type: string
+      TradeAction:
+        $ref: '#/definitions/TradeAction'
+    type: object
+  OrderRequestOSO:
+    description: OrderRequestOSO defines OSOs for placing a trade on WebAPI
+    properties:
+      Orders:
+        items:
+          $ref: '#/definitions/OrderRequest'
+        type: array
+      Type:
+        $ref: '#/definitions/AdvancedOrderType'
+    type: object
+  OrderResponse:
+    description: OrderResponse is the response from placing a trade (OrderRequest)
+    properties:
+      Message:
+        description: The response message of the order
+        type: string
+      OrderID:
+        description: The Order ID of the order
+        type: string
+      Result:
+        $ref: '#/definitions/OrderResponseResult'
+    type: object
+  OrderResponseResult:
+    description: OrderResponseResult is the result of an order response
+    type: integer
+    enum:
+    - OK
+    - FAIL
+  OrderType:
+    description: OrderType defines an OrderType type
+    type: string
+    enum:
+    - LIMIT
+    - STOPMARKET
+    - MARKET
+    - STOPLIMIT
+  Orders:
+    properties:
+      Errors:
+        items:
+          $ref: '#/definitions/orderErrorResponse'
+        type: array
+      Orders:
+        items:
+          $ref: '#/definitions/Order'
+        type: array
+    title: Orders is an object .
+    type: object
+  QuoteStream:
+    description: Quote returns current price data for a symbol
+    properties:
+      Ask:
+        type: string
+        description: Ask
+      AskSize:
+        type: string
+        description: Ask Size
+      Bid:
+        type: string
+        description: Bid
+      BidSize:
+        type: string
+        description: Bid Size
+      Close:
+        type: string
+        description: The close price
+      DailyOpenInterest:
+        type: string
+        description: Daily Open Interest
+      DataFeed:
+        description: DataFeed
+        type: string
+      Error:
+        description: Message if there's an error
+        type: string
+      Halted:
+        description: Halted
+        type: boolean
+      High:
+        type: string
+        description: The high price
+      High52Week:
+        type: string
+        description: High52 Week
+      High52WeekTimestamp:
+        description: 52 week high price time stamp
+        type: string
+      Last:
+        type: string
+        description: Last
+      LastTradingDate:
+        description: LastTradingDate displayed as string
+        type: string
+      Low:
+        type: string
+        description: The low price
+      Low52Week:
+        type: string
+        description: Low52 Week
+      Low52WeekTimestamp:
+        description: 52 week low price time stamp
+        type: string
+      MarketFlags:
+        $ref: '#/definitions/MarketFlags'
+      MarketFlagsDisplay:
+        description: MarketFlagsDisplay
+        type: string
+      NetChange:
+        type: string
+        description: Net Change
+      NetChangePct:
+        type: string
+        description: Net Change Pct
+      Open:
+        type: string
+        description: The open price
+      PreviousClose:
+        type: string
+        description: Previous Close
+      PreviousVolume:
+        type: string
+        description: Previous Volume
+      Restrictions:
+        description: Restriction if any returns array
+        items:
+          type: string
+        type: array
+      Symbol:
+        description: Symbol name
+        type: string
+      TickSizeTier:
+        type: string
+        description: Tick Size Tier
+      TradeTime:
+        description: DailyTime displayed as string
+        type: string
+      Volume:
+        type: string
+        description: Volume
+      TradeSizeTier:
+        type: string
+        description: Trade Size Tier
+    type: object
+  SchemeDescriptor:
+    description: |-
+      SchemeDescriptor describes the schema
+      swagger: model
+    properties:
+      Decimals:
+        description: The number of decimals
+        type: string
+      Format:
+        description: The format of the symbol
+        type: string
+      Fraction:
+        description: The fractional component
+        type: string
+      Increment:
+        description: The increments allowed
+        type: string
+      IncrementSchedule:
+        items:
+          $ref: '#/definitions/IncrementScheduleRow'
+        type: array
+      IncrementStyle:
+        description: The incremental style
+        type: string
+      SubFraction:
+        description: The subfractional component
+        type: string
+    type: object
+  Status:
+    description: |-
+      Status defines an Status type
+      OPN, ACK, UCN = Open Orders -- New order request pending, cancel request pending
+      FLL, FLP = Filled Orders -- Partially-Filled and remaining canceled
+      FPR = Partially Filled Orders - still alive
+      OUT = Canceled Orders - UROut
+      REJ, TSC = Rejected Orders -- It is an internal server(s) unsolicited cancel, not final status
+      EXP = Expired Orders - time constraint
+      BRO = Broken Orders -- Not necessarily the order’s final status since later it may be reinstated to open
+      CAN = Exch. Canceled Orders
+      LAT = Too Late Orders, Too late to cancel -- Not the order’s final status
+      DON = Queued Orders - Done for day
+      ASS = Option Assignment
+      BRC = Bracket Cancelled
+      BRF = Bracket Filled
+      CND = Condition Hit
+      COR = Fill Corrected
+      DIS = Order Dispatched
+      DOA = Dead
+      ECN = Expiration cancel request
+      EXE = Option excercise
+      OSO = OSO order
+      REC = Big Brother Recal request
+      RJC = Cancel request rejected
+      RJR = Change request rejected
+      SCN = Big brother recall
+      STP = Stop price hiy
+      STT = Order status message
+      UCH = Order change requested by customer
+      UCN = Order cancellation requested by customer
+    type: string
+    enum:
+    - ACK
+    - BRO
+    - CAN
+    - CHG
+    - DIS
+    - DOA
+    - EXP
+    - FLL
+    - FLP
+    - FPR
+    - LAT
+    - OPN
+    - OUT
+    - REJ
+    - STT
+    - UCH
+    - UCN
+    - COR
+    - TSC
+    - PLA
+    - RJC
+    - UNSENT
+    - DON
+    - RJR
+    - STP
+    - RSN
+    - CND
+    - ASS
+    - BRC
+    - BRF
+    - ECN
+    - EXE
+    - OSO
+    - REC
+    - SCN
+    - SUS
+  SymbolDetail:
+    description: SymbolDetail provides details about a symbol that do not change frequently
+    properties:
+      AssetType:
+        description: The symbol asset type
+        type: string
+      Country:
+        description: The associated country of the symbol
+        type: string
+      Currency:
+        description: The currency the symbol trades in
+        type: string
+      Description:
+        description: The description of the symbol
+        type: string
+      Exchange:
+        description: The exchange the symbol trades in
+        type: string
+      ExpirationDate:
+        $ref: '#/definitions/Date'
+      FutureType:
+        description: Future Type - applies to futures
+        type: string
+      OptionType:
+        $ref: '#/definitions/CallPut'
+      PriceFormat:
+        $ref: '#/definitions/SchemeDescriptor'
+      QuantityFormat:
+        $ref: '#/definitions/SchemeDescriptor'
+      Root:
+        description: The root
+        type: string
+      StrikePrice:
+        type: string
+        description: For an option order, the strike price for the Put or Call.
+      Symbol:
+        description: The Symbol name or abbreviation
+        type: string
+      Underlying:
+        description: The underlying symbol
+        type: string
+    type: object
+  TimeActivationRule:
+    properties:
+      TimeUtc:
+        description: Order is activated once current UTC time is greater thans or
+          equal to TimeUtc. hh:mm:ss
+        type: string
+    title: TimeActivationRule that must be met before the order is sent to the exchange.
+    type: object
+  TimeInForce:
+    description: TimeInForce defines the duration and duration timestamp
+    properties:
+      Duration:
+        $ref: '#/definitions/Duration'
+      Expiration:
+        description: The time of expiry
+        format: date-time
+        type: string
+    type: object
+  TradeAction:
+    description: |-
+      TradeAction represents the different trade actions that can be sent to or received from WebAPI
+      Valid Values: "NONE" "BUY" "SELL" "BUYTOCOVER" "SELLSHORT" "BUYTOOPEN" "BUYTOCLOSE" "SELLTOOPEN" "SELLTOCLOSE"
+    type: string
+    enum:
+    - BUY
+    - SELL
+    - BUYTOCOVER
+    - SELLSHORT
+    - BUYTOOPEN
+    - BUYTOCLOSE
+    - SELLTOOPEN
+    - SELLTOCLOSE
+  TrailingStop:
+    description: TrailingStop offset; amount or percent
+    properties:
+      Amount:
+        type: string
+        description: 'Currency Offset from current price. Note: Mutually exclusive
+          with Percent.'
+      Percent:
+        type: string
+        description: 'Percentage offset from current price. Note: Mutually exclusive
+          with Amount.'
+    type: object
+  Wallets:
+    description: Wallets is an array of currency holdings
+    properties:
+      Wallets:
+        items:
+          $ref: '#/definitions/wallet'
+        type: array
+    type: object
+  orderErrorResponse:
+    properties:
+      AccountID:
+        description: The name of the error
+        type: string
+      Error:
+        description: The Error
+        type: string
+      Message:
+        description: The error message
+        type: string
+    title: orderErrorResponse is an object supplied when a partial success response
+      is returned with some errors.
+    type: object
+  wallet:
+    properties:
+      AccountID:
+        description: The account ID of the wallet
+        type: string
+      Balance:
+        type: string
+        description: Balance
+      BalanceAvailableForTrading:
+        type: string
+        description: Balance Available For Trading
+      BalanceAvailableForWithdrawal:
+        type: string
+        description: Balance Available For Withdrawal
+      Currency:
+        description: The currency of the wallet
+        type: string
+      Status:
+        description: The status of this wallet - active, suspended
+        type: string
+    type: object
+host: api.tradestation.com
+info:
+  contact:
+    email: WebApi@tradestation.com
+  description: The TradeStation v3 API is a streamlined interface to Brokerage functions
+    & Market Data
+  title: API.
+  version: 3.0.1
+paths:
+  /brokerage/accounts:
+    get:
+      description: Fetches the list of Brokerage Accounts available for the current
+        user
+      operationId: GetAccounts
+      responses:
+        "200":
+          description: Accounts
+          schema:
+            $ref: '#/definitions/Accounts'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+  /brokerage/accounts/{accounts}/balances:
+    get:
+      description: Fetches the brokerage account `Balances` for one or more given
+        accounts
+      operationId: GetBalances
+      parameters:
+      - description: List of accounts in comma separated format. for ex `"1000QA,nbonomg"`
+        in: path
+        name: accounts
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Balances
+          schema:
+            $ref: '#/definitions/Balances'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+  /brokerage/accounts/{accounts}/bodbalances:
+    get:
+      description: Fetches the Beginning of Day Balances for the given Accounts
+      operationId: GetBalancesBOD
+      parameters:
+      - description: List of accounts in comma separated format. for ex `"1000QA,nbonomg"`
+        in: path
+        name: accounts
+        required: true
+        type: string
+      responses:
+        "200":
+          description: BalancesBOD
+          schema:
+            $ref: '#/definitions/BalancesBOD'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+  /brokerage/accounts/{accounts}/historicalorders:
+    get:
+      description: Fetches Historical Orders for the given Accounts
+      operationId: GetHistoricalOrders
+      parameters:
+      - description: List of accounts in comma separated format. for ex `"1000QA,nbonomg"`
+        in: path
+        name: accounts
+        required: true
+        type: string
+      - description: historical orders since date. for ex `"2006-01-02","01-02-2006","2006/01/02","01/02/2006"`
+        in: query
+        name: since
+        type: string
+      responses:
+        "200":
+          description: Orders
+          schema:
+            $ref: '#/definitions/Orders'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+  /brokerage/accounts/{accounts}/orders:
+    get:
+      description: Fetches today's orders for the given Accounts
+      operationId: GetOrders
+      parameters:
+      - description: List of accounts in comma separated format for ex `"1000QA,nbonomg"`
+        in: path
+        name: accounts
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Orders
+          schema:
+            $ref: '#/definitions/Orders'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+  /brokerage/accounts/{accounts}/wallets:
+    get:
+      description: Fetches crypto wallet information
+      operationId: GetWallets
+      parameters:
+      - description: List of accounts in comma separated format. for ex `"1000QA,nbonomg"`
+        in: path
+        name: accounts
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Wallets
+          schema:
+            $ref: '#/definitions/Wallets'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+  /brokerage/orderconfirm:
+    post:
+      description: Creates an Order Confirmation to validate an Order
+      operationId: ConfirmOrder
+      parameters:
+      - description: Order Confirmation Request
+        in: body
+        name: order
+        schema:
+          $ref: '#/definitions/OrderConfirmRequest'
+          description: Order Confirmation Request
+          type: object
+      responses:
+        "200":
+          description: OrderConfirmResponse
+          schema:
+            items:
+              $ref: '#/definitions/OrderConfirmResponse'
+            type: array
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+  /brokerage/ordergroupconfirm:
+    post:
+      description: Creates an Order Confirmation for a group order
+      operationId: ConfirmGroupOrder
+      parameters:
+      - description: Order request
+        in: body
+        name: orderRequest
+        required: true
+        schema:
+          $ref: '#/definitions/GroupOrderRequest'
+          description: Order request
+          type: object
+      responses:
+        "200":
+          description: OrderConfirmResponse
+          schema:
+            items:
+              $ref: '#/definitions/OrderConfirmResponse'
+            type: array
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+  /brokerage/ordergroups:
+    post:
+      description: Creates a group order
+      operationId: PlaceGroupOrder
+      parameters:
+      - description: Order request to place
+        in: body
+        name: orderRequest
+        required: true
+        schema:
+          $ref: '#/definitions/GroupOrderRequest'
+          description: Order request to place
+          type: object
+      responses:
+        "200":
+          description: OrderResponse
+          schema:
+            items:
+              $ref: '#/definitions/OrderResponse'
+            type: array
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+  /brokerage/orders:
+    post:
+      description: Creates a new brokerage order
+      operationId: PlaceOrder
+      parameters:
+      - description: Order to place
+        in: body
+        name: orderRequest
+        required: true
+        schema:
+          $ref: '#/definitions/OrderRequest'
+          description: Order to place
+          type: object
+      responses:
+        "200":
+          description: OrderResponse
+          schema:
+            items:
+              $ref: '#/definitions/OrderResponse'
+            type: array
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+  /brokerage/orders/{orderID}:
+    delete:
+      description: Cancels an active order
+      operationId: CancelOrder
+      parameters:
+      - description: Order ID to cancel
+        in: path
+        name: orderID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OrderResponse
+          schema:
+            $ref: '#/definitions/OrderResponse'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+    put:
+      description: Replaces an active order with a modified version of that order
+      operationId: ReplaceOrder
+      parameters:
+      - description: OrderID for order to replace
+        in: path
+        name: orderID
+        required: true
+        type: string
+      - description: Order to replace
+        in: body
+        name: orderRequest
+        required: true
+        schema:
+          $ref: '#/definitions/OrderReplaceRequest'
+          description: Order to replace
+          type: object
+      responses:
+        "200":
+          description: OrderResponse
+          schema:
+            $ref: '#/definitions/OrderResponse'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Brokerage
+  /marketdata/barcharts/{symbol}:
+    get:
+      description: Fetches marketdata bars for the given symbol, interval, and timeframe
+      operationId: GetBars
+      parameters:
+      - description: The symbol string.
+        in: path
+        name: symbol
+        required: true
+        type: string
+      - description: The interval
+        in: query
+        name: interval
+        required: true
+        type: string
+      - description: The unit
+        in: query
+        name: unit
+        required: true
+        type: string
+      - description: The bars back
+        in: query
+        name: barsBack
+        required: true
+        type: string
+      - description: The start date
+        in: query
+        name: startDate
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Bars
+          schema:
+            $ref: '#/definitions/Bars'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - MarketData
+  /marketdata/stream/barcharts/{symbol}:
+    get:
+      description: Streams marketdata bars for the given symbol, interval, and timeframe
+      operationId: StreamBars
+      parameters:
+      - description: The symbol string.
+        in: path
+        name: symbol
+        required: true
+        type: string
+      - description: The interval
+        in: query
+        name: interval
+        type: string
+      - description: The unit
+        in: query
+        name: unit
+        required: true
+        type: string
+      - description: The bars back
+        in: query
+        name: barsBack
+        required: true
+        type: string
+      produces:
+      - application/vnd.tradestation.streams.v2+json
+      responses:
+        "200":
+          description: Bar
+          schema:
+            $ref: '#/definitions/Bar'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - MarketData
+  /marketdata/stream/quotes/{symbols}:
+    get:
+      description: Streams Quote Changes for a one or more symbols
+      operationId: GetQuoteChangeStream
+      parameters:
+      - description: List of symbols in comma separated format. for ex `"MSFT,BTCUSD"`
+        in: path
+        name: symbols
+        required: true
+        type: string
+      produces:
+      - application/vnd.tradestation.streams.v2+json
+      responses:
+        "200":
+          description: QuoteStream
+          schema:
+            $ref: '#/definitions/QuoteStream'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - MarketData
+  /marketdata/symbols/{symbols}:
+    get:
+      description: Fetches symbol details for a one or more symbols
+      operationId: GetSymbolDetails
+      parameters:
+      - description: List of symbols in comma separated format. for ex `"MSFT,BTCUSD"`
+        in: path
+        name: symbols
+        required: true
+        type: string
+      responses:
+        "200":
+          description: SymbolDetail
+          schema:
+            $ref: '#/definitions/SymbolDetail'
+        "400":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: ErrorResponse
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - MarketData
+produces:
+- application/json
+schemes:
+- https
+securityDefinitions:
+  TradeStationAuth:
+    authorizationUrl: https://login.tradestation.com/authorize
+    description: TradeStation's OpenID Connect[OIDC] Auth provider
+    flow: accessCode
+    scopes:
+      Crypto: Grants access to Cryptocurrency trading & marketdata
+      MarketData: Grants access to Market Data
+      Matrix: Grants marketdata access to Matrix data
+      ReadAccount: Grants read access to Brokerage Account
+      Trade: Grants access to submit Orders to execute trades
+    tokenUrl: https://login.tradestation.com/authorize
+    type: oauth2
+swagger: "2.0"

@@ -1,0 +1,30 @@
+// Define the service, request and response types here for compilation to protobuf file generation
+//import "google/api/annotations.proto";
+syntax = "proto3";
+
+
+message StockPriceRequest {
+    string symbol = 1;
+}
+
+message StockPriceResponse {
+    string symbol = 1;
+    repeated StockPrice prices = 2;
+}
+
+message StockPrice {
+    double Open = 1;
+    double High = 2;
+    double Low = 3;
+    double Close = 4;
+    uint64 volume = 5;
+    uint64 time = 6;
+}
+
+service StockManager {
+	rpc GetStockPrices(StockPriceRequest)returns (StockPriceResponse) {
+        option (dummy.restapiexample.com) = {
+			get: "/api/v1/employees"
+		};
+    }
+}

@@ -1,0 +1,35 @@
+package: github.com/stocks-playground/stock-analytics
+import:
+- package: github.com/golang/protobuf
+  version: ^1.1.0
+  subpackages:
+  - proto
+- package: github.com/grpc-ecosystem/grpc-gateway
+  version: ^1.4.1
+  subpackages:
+  - runtime
+  - utilities
+- package: github.com/parnurzeal/gorequest
+  version: ^0.2.15
+- package: github.com/spf13/viper
+  version: ^1.1.0
+- package: go.uber.org/zap
+  version: ^1.9.1
+- package: golang.org/x/net
+  subpackages:
+  - context
+- package: google.golang.org/genproto
+  subpackages:
+  - googleapis/api/annotations
+- package: google.golang.org/grpc
+  version: ^1.14.0
+  subpackages:
+  - codes
+  - grpclog
+  - reflection
+  - status
+testImport:
+- package: github.com/onsi/ginkgo
+  version: ^1.6.0
+- package: github.com/onsi/gomega
+  version: ^1.4.1

@@ -1,0 +1,45 @@
+{
+    "Orders": [
+        {
+            "AccountID": "543061",
+            "CommissionFee": "",
+            "Duration": "",
+            "FilledPrice": "",
+            "GoodTillDate": "",
+            "GroupName": "",
+            "Legs": [
+                {
+                    "LegNumber": "",
+                    "OpenOrClose": "",
+                    "QuantityOrdered": "",
+                    "QuantityExecuted": "",
+                    "QuantityRemaining": "",
+                    "Symbol": "",
+                    "Side": "",
+                    "Underlying": ""
+                }
+            ],
+            "LimitPrice": "",
+            "MarketActivationRules": [
+                {}
+            ],
+            "OrderID": "",
+            "OpenedDateTime": "",
+            "OrderType": "Limit",
+            "PriceUsedForBuyingPower": "",
+            "Routing": "",
+            "ShowOnlyQuantity": "",
+            "Spread": "",
+            "Status": "",
+            "StatusDescription": "",
+            "StopPrice": "",
+            "TimeActivationRules": [
+                {}
+            ],
+            "TrailingStop": {},
+            "TSADvancedOptions": "",
+            "TriggeredBy": "",
+            "UnbundledRouteFee": ""
+        }
+    ]
+}
