@@ -1,19 +1,27 @@
 package main
 
 import (
+	"log"
 	"os"
 
-	"github.com/swaggo/cli"
+	"github.com/urfave/cli"
 )
 
 func main() {
-	app := cli.NewApp()
-	app.Name = "greet"
-	app.Usage = "say a greeting"
-	app.Action = func(c *cli.Context) error {
-		println("Greetings")
-		return nil
+	app := &cli.App{
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:    "lang",
+				Aliases: []string{"l"},
+				Value:   "english",
+				Usage:   "language for the greeting",
+				EnvVars: []string{"LEGACY_COMPAT_LANG", "APP_LANG", "LANG"},
+			},
+		},
 	}
 
-	app.Run(os.Args)
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
