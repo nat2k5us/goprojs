@@ -2,39 +2,47 @@ package main
 
 import "fmt"
 
-type Animal struct {
+type animal struct {
 }
 
-func (a *Animal) Eat()   { fmt.Println(" eating") }
-func (a *Animal) Sleep() { fmt.Println(" sleeping") }
-func (a *Animal) Breed() { fmt.Println(" breeding") }
+// Eat , Sleep and Breed are true for any Animal - polymorphic behavior
+func (a *animal) Eat()   { fmt.Println(" eating") }
+func (a *animal) Sleep() { fmt.Println(" sleeping") }
+func (a *animal) Breed() { fmt.Println(" breeding") }
 
-type Dog struct {
-	pommy Animal
+type dog struct {
+	pommy animal
+}
+type cat struct {
+	polly animal
+}
+type bird struct {
+	mitto animal
 }
 
-func (a *Dog) Eat() { a.pommy.Eat() }
+func (a *bird) Breed() {
+	fmt.Print("I am a bird")
+	a.mitto.Breed()
+}
 
-func (a *Dog) Sleep() {
+func (a *dog) Eat() { a.pommy.Eat() }
+
+func (a *dog) Sleep() {
 	fmt.Print("I am a Dog")
 	a.pommy.Sleep()
 }
-func (a *Dog) Breed() {
+func (a *dog) Breed() {
 	fmt.Print("I am a Dog")
 	a.pommy.Breed()
 }
 
-type Cat struct {
-	polly Animal
-}
+func (a *cat) Eat() { a.polly.Eat() }
 
-func (a *Cat) Eat() { a.polly.Eat() }
-
-func (a *Cat) Sleep() {
+func (a *cat) Sleep() {
 	fmt.Print("I am a Cat")
 	a.polly.Sleep()
 }
-func (a *Cat) Breed() {
+func (a *cat) Breed() {
 	fmt.Print("I am a Cat")
 	a.polly.Breed()
 }
@@ -45,14 +53,18 @@ type SleepingDen interface {
 type BreedingDen interface {
 	Breed()
 }
+type EatingDen interface {
+	Breed()
+}
 
 func main() {
 	fmt.Println("Lesson 2")
-	animals := []SleepingDen{new(Cat), new(Dog)}
+	animals := []SleepingDen{new(cat), new(dog)}
 	for _, x := range animals {
 		x.Sleep()
 	}
-	pets := []BreedingDen{new(Cat), new(Dog)}
+	
+	pets := []BreedingDen{new(cat), new(dog), new(bird)}
 	for _, x := range pets {
 		x.Breed()
 	}
