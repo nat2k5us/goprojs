@@ -1,9 +1,8 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"os"
+	"time"
 )
 
 // Like a river, a channel serves as a conduit for a stream of information;
@@ -27,19 +26,17 @@ import (
 // var dataStream chan <- interface{}
 // 	dataStream := make(chan <- interface{})
 
+// Unblocking multiple go routines at once
 func main() {
-	var stdoutBuff bytes.Buffer // in memory buffer
-	defer stdoutBuff.WriteTo(os.Stdout)
-	intStream := make(chan int, 4)
-	go func() {
-		defer close(intStream)
-		defer fmt.Fprintln(&stdoutBuff, "Producer Done.")
-		for i := 0; i < 5; i++ {
-			fmt.Fprintf(&stdoutBuff, "Sending: %d\n", i)
-			intStream <- i
-		}
-	}()
-	for integer := range intStream {
-		fmt.Fprintf(&stdoutBuff, "Received %v.\n", integer)
+	var c1, c2 <-chan interface{} // receive channels
+	var c3 chan<- interface{}     // send channels
+	select {
+	case <-c1:
+	// Do something
+	case <-c2:
+	// Do something
+	case c3 <- struct{}{}:
+		// Do something
 	}
+
 }

@@ -1,11 +1,5 @@
 package main
 
-import (
-	"bytes"
-	"fmt"
-	"os"
-)
-
 // Like a river, a channel serves as a conduit for a stream of information;
 // values may be passed along the channel, and then read out downstream.
 // For this reason I usually end my chan variable names with the word “Stream.”
@@ -27,19 +21,28 @@ import (
 // var dataStream chan <- interface{}
 // 	dataStream := make(chan <- interface{})
 
+// Unblocking multiple go routines at once
 func main() {
-	var stdoutBuff bytes.Buffer // in memory buffer
-	defer stdoutBuff.WriteTo(os.Stdout)
-	intStream := make(chan int, 4)
-	go func() {
-		defer close(intStream)
-		defer fmt.Fprintln(&stdoutBuff, "Producer Done.")
-		for i := 0; i < 5; i++ {
-			fmt.Fprintf(&stdoutBuff, "Sending: %d\n", i)
-			intStream <- i
-		}
-	}()
-	for integer := range intStream {
-		fmt.Fprintf(&stdoutBuff, "Received %v.\n", integer)
-	}
+	// read from a nil data stream
+	var datastream chan interface{}
+	<-datastream
+	// ----- OUTPUT --------------------------------
+	// fatal error: all goroutines are asleep - deadlock!
+	// goroutine 1 [chan receive (nil chan)]:
+
+	// write to a nil data stream
+	var dataStream chan interface{}
+	dataStream <- struct{}{}
+	// ----- OUTPUT --------------------------------
+	// fatal error: all goroutines are asleep - deadlock!
+	// goroutine 1 [chan send (nil chan)]:
+
+	// close a nil channel
+	var dataStream chan interface{}
+	close(dataStream)
+	// ----- OUTPUT -----------------------------
+	// panic: close of nil channel
+
 }
+
+
