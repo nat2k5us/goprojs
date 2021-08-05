@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 // Like a river, a channel serves as a conduit for a stream of information;
@@ -25,20 +26,19 @@ import (
 // var dataStream chan <- interface{}
 // 	dataStream := make(chan <- interface{})
 
+// Unblocking multiple go routines at once
 func main() {
 
-	data := make([]int, 4)
-	loopData := func(handleData chan<- int) {
-		defer close(handleData)
-		for i := range data {
-			handleData <- data[i]
-		}
-	}
 
-	handleData := make(chan int)
-	go loopData(handleData)
-
-	for num := range handleData {
-		fmt.Println(num)
+	start := time.Now()
+	c := make(chan interface{})
+	go func() {
+		time.Sleep(5 * time.Second)
+		close(c)
+	}()
+	fmt.Println("Blocking on read...")
+	select {
+	case <-c:
+		fmt.Printf("Unblocked %v later.\n", time.Since(start))
 	}
 }

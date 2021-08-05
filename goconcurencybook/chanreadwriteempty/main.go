@@ -25,20 +25,30 @@ import (
 // var dataStream chan <- interface{}
 // 	dataStream := make(chan <- interface{})
 
+// Notes: Once a channel is read - it will be empty
 func main() {
 
-	data := make([]int, 4)
-	loopData := func(handleData chan<- int) {
-		defer close(handleData)
-		for i := range data {
-			handleData <- data[i]
-		}
+	chanOwner := func() <-chan int { // func returns <-chan int
+		results := make(chan int, 5) // make a buffered channel of 5
+		go func() {                  // go routine
+			defer close(results) // close the channel when fn goes out of scope
+			for i := 0; i <= 5; i++ {
+				results <- i // write to channel
+			}
+		}()
+		return results
 	}
 
-	handleData := make(chan int)
-	go loopData(handleData)
+	// channel is populated with data
+	results := chanOwner()
 
-	for num := range handleData {
-		fmt.Println(num)
+	// read the data that was populated
+	for x := range results {
+		fmt.Printf("x: %d\n", x)
 	}
+	// try to read it again will give empty channel
+	for x := range results {
+		fmt.Printf("x: %d\n", x)
+	}
+
 }

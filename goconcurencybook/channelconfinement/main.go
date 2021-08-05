@@ -25,20 +25,33 @@ import (
 // var dataStream chan <- interface{}
 // 	dataStream := make(chan <- interface{})
 
+// Unblocking multiple go routines at once
 func main() {
 
-	data := make([]int, 4)
-	loopData := func(handleData chan<- int) {
-		defer close(handleData)
-		for i := range data {
-			handleData <- data[i]
+	chanOwner := func() <-chan int { // func returns <-chan int
+		results := make(chan int, 5) // make a buffered channel of 5
+		go func() {                  // go routine
+			defer close(results) // close the channel when fn goes out of scope
+			for i := 0; i <= 5; i++ {
+				results <- i // write to channel
+			}
+		}()
+		return results
+	}
+	consumer := func(results <-chan int) { // fn input param <-chan int
+		for result := range results {
+			result = 10
+			fmt.Printf("Received: %d\n", result)
 		}
+		fmt.Println("Done receiving!")
+	}
+	results := chanOwner()
+
+	consumer(results) // consume is not allowed to modify channel data
+
+	for x := range results {
+		fmt.Println(x)
 	}
 
-	handleData := make(chan int)
-	go loopData(handleData)
-
-	for num := range handleData {
-		fmt.Println(num)
-	}
+	fmt.Printf("Received: %#v\n", results)
 }

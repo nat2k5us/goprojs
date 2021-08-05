@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"sync"
 )
 
 // Like a river, a channel serves as a conduit for a stream of information;
@@ -27,18 +29,18 @@ import (
 
 func main() {
 
-	data := make([]int, 4)
-	loopData := func(handleData chan<- int) {
-		defer close(handleData)
-		for i := range data {
-			handleData <- data[i]
+	printData := func(wg *sync.WaitGroup, data []byte) {
+		defer wg.Done()
+		var buff bytes.Buffer
+		for _, b := range data {
+			fmt.Fprintf(&buff, "%c", b)
 		}
+		fmt.Println(buff.String())
 	}
-
-	handleData := make(chan int)
-	go loopData(handleData)
-
-	for num := range handleData {
-		fmt.Println(num)
-	}
+	var wg sync.WaitGroup
+	wg.Add(2)
+	data := []byte("golang")
+	go printData(&wg, data[:3])
+	go printData(&wg, data[3:])
+	wg.Wait()
 }
