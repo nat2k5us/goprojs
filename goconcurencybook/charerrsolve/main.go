@@ -103,8 +103,8 @@ func main() {
 		// intelligently, and with the full context of the larger program.
 		if result.Error != nil {
 			fmt.Printf("error: %v\n", result.Error)
-			errCount++
-			if errCount >= 3 {
+			errorCount++
+			if errorCount >= 3 {
 				fmt.Println("Too many errors, breaking!")
 				break
 			}
