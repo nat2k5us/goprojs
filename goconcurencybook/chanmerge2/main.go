@@ -54,6 +54,36 @@ type MyStream struct {
 	Circle    float64 `json:"circle,omitempty"`
 }
 
+func UpdateStream(geo <-chan interface{}, stm *MyStream) <-chan interface{} {
+	stream := make(chan interface{})
+	i1 := square{}
+	i2 := rectangle{}
+	i3 := circle{}
+	
+	go func() {
+		for {
+			select {
+			case o1 := <-geo:
+				switch o1.(type) {
+				case *square:
+					stm.Square = i1.area((rand.Float64() * 5) + 25)
+					stream <- stm
+					return
+				case *rectangle:
+					stm.Rectangle = i2.area((rand.Float64()*5)+25, (rand.Float64()*5)+25)
+					stream <- stm
+					return
+				case *circle:
+					stm.Circle = i3.area((rand.Float64() * 5) + 10)
+					stream <- stm
+					return
+				}
+			}
+		}
+	}()
+	return stream
+}
+
 func main() {
 
 	stream := make(chan interface{})
@@ -61,7 +91,6 @@ func main() {
 	geo := make(chan interface{})
 	defer close(geo)
 
-	// In this goroutine we generate a random geometry type
 	go func() {
 		for {
 			time.Sleep(time.Second)
@@ -69,45 +98,23 @@ func main() {
 			switch obj {
 			case 0:
 				geo <- new(square)
+				
 			case 1:
 				geo <- new(rectangle)
+				
 			case 2:
 				geo <- new(circle)
+				
 			}
 		}
 	}()
 
-	// here we create a streaming frame of objects
-	// MyStream and update it to have the area of 
-	// square, rectangle or circle
-	// then we send that value into stream
-	go func() {
-		i1 := square{}
-		i2 := rectangle{}
-		i3 := circle{}
-		initInstance := MyStream{Square: 0, Rectangle: 0, Circle: 0}
-		for {
-			select {
-			case o1 := <-geo:
-				switch o1.(type) {
-				case *square:
-					initInstance.Square = i1.area((rand.Float64() * 5) + 25)
-					stream <- initInstance
-				case *rectangle:
-					initInstance.Rectangle = i2.area((rand.Float64()*5)+25, (rand.Float64()*5)+25)
-					stream <- initInstance
-				case *circle:
-					initInstance.Circle = i3.area((rand.Float64() * 5) + 10)
-					stream <- initInstance
-				}
-			}
-		}
-	}()
-
-	// here we sit in a loop displaying the updated 
-	// stream
+	myStreamInstance := MyStream{Square:0, Rectangle:0, Circle:0}
 	for {
-		fmt.Printf("MyStream : %v\n", <-stream)
+		got := <-UpdateStream(geo, &myStreamInstance)
+		fmt.Printf("got %#v\n", got)
 	}
+
+
 
 }
