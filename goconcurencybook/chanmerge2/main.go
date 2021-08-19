@@ -98,23 +98,16 @@ func main() {
 			switch obj {
 			case 0:
 				geo <- new(square)
-				
 			case 1:
 				geo <- new(rectangle)
-				
 			case 2:
 				geo <- new(circle)
-				
 			}
 		}
 	}()
-
 	myStreamInstance := MyStream{Square:0, Rectangle:0, Circle:0}
 	for {
 		got := <-UpdateStream(geo, &myStreamInstance)
-		fmt.Printf("got %#v\n", got)
+		fmt.Printf("got %#v\n", got.(MyStream))
 	}
-
-
-
 }
