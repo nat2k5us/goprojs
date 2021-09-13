@@ -27,7 +27,7 @@ func Test_my_operations(t *testing.T) {
 		wantErr bool
 	}{
 		{"name", fields{false},false},
-		{"name", fields{true},true},
+		{"name1", fields{true},true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

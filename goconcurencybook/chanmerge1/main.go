@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	log "github.com/sirupsen/logrus"
+	// log "github.com/sirupsen/logrus"
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -30,11 +30,11 @@ func merge(cs ...<-chan interface{}) <-chan interface{} {
 			for v := range c {
 				switch v.(type) {
 				case nil:
-					log.Warn("got chan nil")
+					fmt.Println("got chan nil")
 					out <- errors.New("nil stream closed")
 					return
 				case error:
-					log.Warn("got chan error")
+					fmt.Println("got chan error")
 					out <- errors.New("error stream closed")
 					return
 				case string:
@@ -77,12 +77,13 @@ func main() {
 	for {
 		select {
 		case o1 := <-ch1:
+			// The below merge does not work because
 			fmt.Println("Merged", <-merge(ch1, ch2))
 			fmt.Printf("\t  1: %v\n", o1)
 
 		case o2 := <-ch2:
 			fmt.Println("Merged", <-merge(ch1, ch2))
-			fmt.Printf("\t  2: %v\n", o2)
+			fmt.Printf("\t 1: %v 2: %v\n",ch1,  o2)
 
 		}
 	}

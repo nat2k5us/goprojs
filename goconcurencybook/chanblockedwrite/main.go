@@ -32,7 +32,7 @@ import (
 // The for-select loop
 // for { // either loop infinitely or range over something
 // 	select {
-// 		// do some work on channels
+// 		 do some work on channels
 // 	}
 // }
 
@@ -46,7 +46,9 @@ import (
 // 		case stringStream <- s:
 // 		}
 // 	}
+
 func main() {
+	// //memory leaked version
 	// newRandStream := func() <-chan int {
 	// 	randStream := make(chan int)
 	// 	go func() {
@@ -63,6 +65,11 @@ func main() {
 	// for i := 1; i <= 3; i++ {
 	// 	fmt.Printf("%d: %d\n", i, <-randStream)
 	// }
+// /// Output //////////////////////////////////
+// 3 random ints:
+// 1: 5577006791947779410
+// 2: 8674665223082153551
+// 3: 6129484611666145821
 
 	// Fixed Version
 	// The 'done' channel is used to prevent memory leaks
@@ -91,4 +98,11 @@ func main() {
 	close(done)
 	// Simulate ongoing work
 	time.Sleep(1 * time.Second)
+
+	// /// Output //////////////////////////////////
+	// 3 random ints:
+	// 1: 5577006791947779410
+	// 2: 8674665223082153551
+	// 3: 6129484611666145821
+	// newRandStream closure exited.
 }

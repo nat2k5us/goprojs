@@ -26,7 +26,7 @@ func parseInt(i interface{}) (int, error) {
 	return strconv.Atoi(s)
 }
 
-//       ch
+//       ch dump to                                      read out from ch
 //------------------------------------------------------------------------------
 //
 //       ch <- 4                                         <-ch
@@ -37,7 +37,7 @@ func main() {
 	ch1 := make(chan interface{})
 	ch2 := make(chan interface{})
 
-	sumit := 0
+	sum_it := 0
 	go func() {
 		for {
 			time.Sleep(time.Second)
@@ -58,15 +58,15 @@ func main() {
 	for {
 		select {
 		case o1 := <-ch1:
-			fmt.Printf("\t  1: %v\n", o1)
+			// fmt.Printf("\t  1: %v\n", o1)
 			temp, _ := o1.(int)
-			sumit += temp
-			fmt.Printf("sumit %d\n", sumit)
+			sum_it += temp
+			fmt.Printf("sum_it %d\n", sum_it)
 		case o2 := <-ch2:
-			fmt.Printf("\t  2: %v\n", o2)
+			// fmt.Printf("\t  2: %v\n", o2)
 			temp, _ := o2.(int)
-			sumit += temp
-			fmt.Printf("sumit %d\n", sumit)
+			sum_it += temp
+			fmt.Printf("sum_it %d\n", sum_it)
 		}
 	}
 

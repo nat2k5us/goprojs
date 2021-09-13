@@ -19,7 +19,7 @@ func RandStringBytes(n int) string {
 func main() {
 	ch1 := make(chan interface{})
 	ch2 := make(chan interface{})
-
+	// Open two channels and collect it
 	go func() {
 		for {
 			time.Sleep(time.Second)
@@ -30,7 +30,7 @@ func main() {
 	}()
 	go func() {
 		for {
-			time.Sleep(time.Second)
+			time.Sleep(time.Second* 5)
 			t2 := RandStringBytes(8)
 			fmt.Println("Add to 2:", t2)
 			ch2 <- t2
@@ -41,10 +41,8 @@ func main() {
 		select {
 		case o1 := <-ch1:
 			fmt.Printf("\t  1: %v\n", o1)
-
 		case o2 := <-ch2:
 			fmt.Printf("\t  2: %v\n", o2)
-
 		}
 	}
 }
