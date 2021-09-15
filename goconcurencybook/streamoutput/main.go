@@ -105,90 +105,41 @@ type AccountOverview struct {
 
 // NewAccountOverview returns all of the fields.
 func NewAccountOverview() (AccountOverview, error) {
-
+	fmt.Println("AccountOverview")
 	out := AccountOverview{}
 	out.FakeIt()
 	return out, nil
 }
 
 func (a *AccountOverview) FakeIt() {
+	fmt.Println("Fakeit")
+	a.TotalPortfolioValue = FakeDecimal(a.TotalPortfolioValue, RandomDecimal2())
+	a.TotalPortfolioProfitLoss = FakeDecimal(a.TotalPortfolioProfitLoss, RandomDecimal2())
+	a.TotalPortfolioProfitLossPercent = FakeDecimal(a.TotalPortfolioProfitLossPercent, RandomDecimal2())
 
-	a.TotalPortfolioValue = FakeDecimal(a.TotalPortfolioValue, fake)
-	a.TotalPortfolioProfitLoss = FakeDecimal(a.TotalPortfolioProfitLoss, FakePriceValue)
-	a.TotalPortfolioProfitLossPercent = util.FakeDecimal(a.TotalPortfolioProfitLossPercent, FakePriceValue)
-
-	item1 := Item{AssetType: "EQ", TotalValue: util.RandomDecimal2(), ValuePercent: util.RandomDecimal2()}
-	item2 := Item{AssetType: "OP", TotalValue: util.RandomDecimal2(), ValuePercent: util.RandomDecimal2()}
-	item3 := Item{AssetType: "FU", TotalValue: util.RandomDecimal2(), ValuePercent: util.RandomDecimal2()}
-	item4 := Item{AssetType: "CRTPTO", TotalValue: util.RandomDecimal2(), ValuePercent: util.RandomDecimal2()}
-	item5 := Item{AssetType: "CASH", TotalValue: util.RandomDecimal2(), ValuePercent: util.RandomDecimal2()}
+	item1 := Item{AssetType: "EQ", TotalValue: RandomDecimal2(), ValuePercent: RandomDecimal2()}
+	item2 := Item{AssetType: "OP", TotalValue: RandomDecimal2(), ValuePercent: RandomDecimal2()}
+	item3 := Item{AssetType: "FU", TotalValue: RandomDecimal2(), ValuePercent: RandomDecimal2()}
+	item4 := Item{AssetType: "CRTPTO", TotalValue: RandomDecimal2(), ValuePercent: RandomDecimal2()}
+	item5 := Item{AssetType: "CASH", TotalValue: RandomDecimal2(), ValuePercent: RandomDecimal2()}
 	FakeHoldings := []Holding{{"Assets", []Item{item1, item2, item3, item4, item5}},
 		{"Sectors", nil},
 	}
 	a.Holdings = FakeHoldings
-	acctInvestments := Account{AccountID: "SIM2323223", DisplayName: "Investments", AccountProfitLossPercent: util.RandomDecimal2(), AccountProfitLoss: util.RandomDecimal2(), TotalValue: util.RandomDecimal2(), EnabledAssets: []string{"EQ", "OP", "CRYPTO"}}
-	acctCrypto := Account{AccountID: "SIM2323224", DisplayName: "Crypto", AccountProfitLossPercent: util.RandomDecimal2(), AccountProfitLoss: util.RandomDecimal2(), TotalValue: util.RandomDecimal2(), EnabledAssets: []string{"CRYPTO"}}
-	acctDayTrades := Account{AccountID: "SIM2323225", DisplayName: "Day Trading", AccountProfitLossPercent: util.RandomDecimal2(), AccountProfitLoss: util.RandomDecimal2(), TotalValue: util.RandomDecimal2(), EnabledAssets: []string{"EQ", "OP", "CRYPTO"}}
-	acctFutures := Account{AccountID: "SIM2323226", DisplayName: "Futures", AccountProfitLossPercent: util.RandomDecimal2(), AccountProfitLoss: util.RandomDecimal2(), TotalValue: util.RandomDecimal2(), EnabledAssets: []string{"FU"}}
+	acctInvestments := Account{AccountID: "SIM2323223", DisplayName: "Investments", AccountProfitLossPercent: RandomDecimal2(), AccountProfitLoss: RandomDecimal2(), TotalValue: RandomDecimal2(), EnabledAssets: []string{"EQ", "OP", "CRYPTO"}}
+	acctCrypto := Account{AccountID: "SIM2323224", DisplayName: "Crypto", AccountProfitLossPercent: RandomDecimal2(), AccountProfitLoss: RandomDecimal2(), TotalValue: RandomDecimal2(), EnabledAssets: []string{"CRYPTO"}}
+	acctDayTrades := Account{AccountID: "SIM2323225", DisplayName: "Day Trading", AccountProfitLossPercent: RandomDecimal2(), AccountProfitLoss: RandomDecimal2(), TotalValue: RandomDecimal2(), EnabledAssets: []string{"EQ", "OP", "CRYPTO"}}
+	acctFutures := Account{AccountID: "SIM2323226", DisplayName: "Futures", AccountProfitLossPercent: RandomDecimal2(), AccountProfitLoss: RandomDecimal2(), TotalValue: RandomDecimal2(), EnabledAssets: []string{"FU"}}
 	FakeAccountSummaries := []AccountSummary{
-		{EnabledAssets: []string{"EQ"}, NumberOfAccounts: 3, TotalValue: util.RandomDecimal2(), ProfitLoss: util.RandomDecimal2(), ProfitLossPercent: util.RandomDecimal2(), Accounts: []Account{acctInvestments, acctCrypto, acctDayTrades}},
-		{EnabledAssets: []string{"FU"}, NumberOfAccounts: 1, TotalValue: util.RandomDecimal2(), ProfitLoss: util.RandomDecimal2(), ProfitLossPercent: util.RandomDecimal2(), Accounts: []Account{acctFutures}},
+		{EnabledAssets: []string{"EQ"}, NumberOfAccounts: 3, TotalValue: RandomDecimal2(), ProfitLoss: RandomDecimal2(), ProfitLossPercent: RandomDecimal2(), Accounts: []Account{acctInvestments, acctCrypto, acctDayTrades}},
+		{EnabledAssets: []string{"FU"}, NumberOfAccounts: 1, TotalValue: RandomDecimal2(), ProfitLoss: RandomDecimal2(), ProfitLossPercent: RandomDecimal2(), Accounts: []Account{acctFutures}},
 	}
 	a.AccountSummaries = FakeAccountSummaries
 
 }
 
-// func (a AccountOverview) decimalUpdateIfNotNil(existing, update *pricefmt.Decimal) *pricefmt.Decimal {
-// 	return existing
-// }
-
-// TODO: GetChanges return updated fields only
-func (a AccountOverview) GetChanges(old AccountOverview) AccountOverview {
-	return a
-}
-
-// type outputWriter interface {
-// 	WriteError(code, message string, fatal bool) error
-// 	WriteObject(...interface{}) error
-// }
-
-func NewAccountOverviewStream(ctx context.Context, accountOverview <-chan interface{}) <-chan interface{} {
-	outputCh := make(chan interface{})
-	currentAccountOverview := AccountOverview{}
-	go func() {
-		for {
-			select {
-			case <-ctx.Done():
-				log.Debug("AccountOverviewService.Run ctx.Done")
-				return
-			case unk := <-accountOverview:
-				xType := fmt.Sprintf("%T", unk)
-				fmt.Println(xType)
-				switch asTyp := unk.(type) {
-				case nil:
-					log.Warn("AccountDetailService chan nil")
-					outputCh <- errors.New("stream closed")
-					return
-				case error, v3.WebAPIError:
-					fmt.Println("AccountOverviewService", asTyp)
-					outputCh <- errors.New("error from BODBalances?")
-					return
-				case v3.Balance:
-					newAccountOverview, err := NewAccountOverview()
-					if err != nil {
-						log.WithError(err).Error("error creating account overview")
-						outputCh <- errors.New("error calculating account overview")
-						return
-					}
-					outputCh <- newAccountOverview.GetChanges(currentAccountOverview)
-					currentAccountOverview = newAccountOverview
-				}
-			}
-		}
-	}()
-	return outputCh
-}
 func NewFakeAccountOverviewStream(ctx context.Context) <-chan interface{} {
+	fmt.Println("NewFakeAccountOverviewStream")
 	outputCh := make(chan interface{})
 	overview := AccountOverview{}
 	overview.FakeIt()
@@ -207,6 +158,7 @@ func NewFakeAccountOverviewStream(ctx context.Context) <-chan interface{} {
 				return
 			case <-time.After(time.Second * 10):
 				overview.FakeIt()
+				fmt.Println("overview", overview)
 			}
 		}
 	}()
@@ -214,5 +166,7 @@ func NewFakeAccountOverviewStream(ctx context.Context) <-chan interface{} {
 }
 
 func main() {
-	SayHello("Sam")
+	for {
+		NewFakeAccountOverviewStream(context.Background())
+	}
 }

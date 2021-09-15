@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/nat2k5us/goprojs/goconcurencybook/packagetest/hello"
+	"./pkg/hello"
 )
 func main() {
 	SayHello()
