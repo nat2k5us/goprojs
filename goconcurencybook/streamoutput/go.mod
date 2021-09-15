@@ -1,4 +1,4 @@
-module github.com/nat2k5us/goprojs/goconcurencybook/chancombine
+module github.com/nat2k5us/goprojs/goconcurencybook/streamoutput
 
 go 1.16
 

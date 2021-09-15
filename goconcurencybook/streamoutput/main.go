@@ -8,6 +8,8 @@ import (
 	"time"
 
 	pricefmt "github.com/shopspring/decimal"
+
+	"github.com/nat2k5us/goprojs/goconcurencybook/streamoutput/pkg/util"
 )
 
 func init() {
@@ -113,7 +115,7 @@ func NewAccountOverview() (AccountOverview, error) {
 
 func (a *AccountOverview) FakeIt() {
 	fmt.Println("Fakeit")
-	a.TotalPortfolioValue = FakeDecimal(a.TotalPortfolioValue, RandomDecimal2())
+	a.TotalPortfolioValue = util.FakeDecimal(a.TotalPortfolioValue, util.RandomDecimal2())
 	a.TotalPortfolioProfitLoss = FakeDecimal(a.TotalPortfolioProfitLoss, RandomDecimal2())
 	a.TotalPortfolioProfitLossPercent = FakeDecimal(a.TotalPortfolioProfitLossPercent, RandomDecimal2())
 
