@@ -78,6 +78,7 @@ func main() {
 		select {
 		case o1 := <-ch1:
 			// The below merge does not work because
+			// a channel can be read from once - once read the contents are cleared
 			fmt.Println("Merged", <-merge(ch1, ch2))
 			fmt.Printf("\t  1: %v\n", o1)
 

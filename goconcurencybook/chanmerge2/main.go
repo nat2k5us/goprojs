@@ -108,6 +108,6 @@ func main() {
 	myStreamInstance := MyStream{Square:0, Rectangle:0, Circle:0}
 	for {
 		got := <-UpdateStream(geo, &myStreamInstance)
-		fmt.Printf("got %#v\n", got.(MyStream))
+		fmt.Printf("got %#v\n", got.(*MyStream))
 	}
 }
