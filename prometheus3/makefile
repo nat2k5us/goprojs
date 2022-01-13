@@ -32,7 +32,7 @@ run-docker:
 build-docker:
 	docker build --tag myapp .
 
-helm-install-myapp: build-docker
+ia: build-docker
 	helm upgrade --install myapp \
 	--namespace=default \
 	charts/myapp \
@@ -40,17 +40,17 @@ helm-install-myapp: build-docker
 	--set image.tag=v1.0 \
 	--set image.repository=myapp
 
-helm-uninstall-myapp:
+aui:
 	helm uninstall myapp
 
-grafana-uninstall:
+gui:
 	helm uninstall my-grafana
 
-grafana-install:
-	helm install my-grafana bitnami/grafana
+gi:
+	helm install my-grafana bitnami/grafana -f charts/grafana/values.yaml
 
-prometheus-install:
-	helm install my-prometheus prometheus-community/prometheus
+pi:
+	helm install my-prometheus charts/kube-prometheus -f charts/kube-prometheus/values.yaml
 
-prometheus-uninstall:
+pui:
 	helm uninstall my-prometheus
