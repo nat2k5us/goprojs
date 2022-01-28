@@ -30,15 +30,15 @@ run-docker:
 	./run/run-docker.sh
 
 build-docker:
-	docker build --tag myapp .
+	docker build --tag prometheus3 .
 
-ia: build-docker
+ai: build-docker
 	helm upgrade --install myapp \
 	--namespace=default \
 	charts/myapp \
 	-f charts/myapp/values.yaml \
-	--set image.tag=v1.0 \
-	--set image.repository=myapp
+	--set image.tag=latest \
+	--set image.repository=prometheus3
 
 aui:
 	helm uninstall myapp
